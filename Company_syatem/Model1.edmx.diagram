@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7c10001e77ef4ef39267b55d8ca68d62" Name="Diagram1" ZoomLevel="86">
+        <EntityTypeShape EntityType="Model.client" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.issuance_request" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Item" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.supplier" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.supply_request" Width="1.5" PointX="8.25" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.warehouse" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.warehouse_trasactions" Width="1.5" PointX="5.25" PointY="2.875" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_issuance_request_client" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_issuance_request_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_issuance_request_warehouse" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Item_warehouse" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_supply_request_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_warehouse_trasactions_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_supply_request_supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_warehouse_trasactions_supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_supply_request_warehouse" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_warehouse_trasactions_warehouse2" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_warehouse_trasactions_warehouse3" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

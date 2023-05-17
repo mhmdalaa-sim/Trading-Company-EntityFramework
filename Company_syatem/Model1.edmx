@@ -1,0 +1,739 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="cli_id" />
+          </Key>
+          <Property Name="cli_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cli_name" Type="nchar" MaxLength="20" />
+          <Property Name="moblie" Type="nchar" MaxLength="20" />
+          <Property Name="phone" Type="nchar" MaxLength="20" />
+          <Property Name="fax" Type="nchar" MaxLength="20" />
+          <Property Name="mail" Type="nchar" MaxLength="20" />
+          <Property Name="email" Type="nchar" MaxLength="20" />
+          <Property Name="website" Type="nchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="issuance_request">
+          <Key>
+            <PropertyRef Name="is_id" />
+          </Key>
+          <Property Name="is_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="warehouse_id" Type="int" Nullable="false" />
+          <Property Name="is_date" Type="date" />
+          <Property Name="client_id" Type="int" Nullable="false" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="item_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="item_name" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="unit" Type="nchar" MaxLength="20" />
+          <Property Name="production_date" Type="date" />
+          <Property Name="expire_date" Type="date" />
+          <Property Name="warehouse_id" Type="int" />
+        </EntityType>
+        <EntityType Name="supplier">
+          <Key>
+            <PropertyRef Name="sup_id" />
+          </Key>
+          <Property Name="sup_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sup_name" Type="nchar" MaxLength="20" />
+          <Property Name="mobile" Type="nchar" MaxLength="20" />
+          <Property Name="website" Type="nchar" MaxLength="50" />
+          <Property Name="email" Type="nchar" MaxLength="50" />
+          <Property Name="mail" Type="nchar" MaxLength="50" />
+          <Property Name="fax" Type="nchar" MaxLength="20" />
+          <Property Name="phone" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="supply_request">
+          <Key>
+            <PropertyRef Name="srequest_id" />
+          </Key>
+          <Property Name="srequest_id" Type="int" Nullable="false" />
+          <Property Name="warehouse_id" Type="int" Nullable="false" />
+          <Property Name="request_date" Type="date" />
+          <Property Name="supplier_id" Type="int" />
+          <Property Name="production_date" Type="date" />
+          <Property Name="expire_date" Type="date" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="warehouse">
+          <Key>
+            <PropertyRef Name="ware_id" />
+          </Key>
+          <Property Name="ware_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ware_name" Type="nchar" MaxLength="20" />
+          <Property Name="ware_address" Type="nchar" MaxLength="20" />
+          <Property Name="manger" Type="nchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="warehouse_trasactions">
+          <Key>
+            <PropertyRef Name="trans_id" />
+          </Key>
+          <Property Name="trans_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="from_warehouse" Type="int" />
+          <Property Name="to_warehouse" Type="int" />
+          <Property Name="supplier_id" Type="int" />
+          <Property Name="production_date" Type="date" />
+          <Property Name="expire_date" Type="date" />
+        </EntityType>
+        <Association Name="FK_issuance_request_client">
+          <End Role="client" Type="Self.client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="issuance_request" Type="Self.issuance_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="cli_id" />
+            </Principal>
+            <Dependent Role="issuance_request">
+              <PropertyRef Name="client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issuance_request_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="issuance_request" Type="Self.issuance_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="issuance_request">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issuance_request_warehouse">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="issuance_request" Type="Self.issuance_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="issuance_request">
+              <PropertyRef Name="warehouse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_warehouse">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="0..1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="warehouse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supply_request_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="supply_request" Type="Self.supply_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="supply_request">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supply_request_supplier">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="supply_request" Type="Self.supply_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="sup_id" />
+            </Principal>
+            <Dependent Role="supply_request">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supply_request_warehouse">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="supply_request" Type="Self.supply_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="supply_request">
+              <PropertyRef Name="warehouse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_supplier">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="sup_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_warehouse2">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="from_warehouse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_warehouse3">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="to_warehouse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="client" EntityType="Self.client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="issuance_request" EntityType="Self.issuance_request" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="supplier" EntityType="Self.supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="supply_request" EntityType="Self.supply_request" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="warehouse" EntityType="Self.warehouse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="warehouse_trasactions" EntityType="Self.warehouse_trasactions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_issuance_request_client" Association="Self.FK_issuance_request_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="issuance_request" EntitySet="issuance_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issuance_request_Item" Association="Self.FK_issuance_request_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="issuance_request" EntitySet="issuance_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issuance_request_warehouse" Association="Self.FK_issuance_request_warehouse">
+            <End Role="warehouse" EntitySet="warehouse" />
+            <End Role="issuance_request" EntitySet="issuance_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_warehouse" Association="Self.FK_Item_warehouse">
+            <End Role="warehouse" EntitySet="warehouse" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supply_request_Item" Association="Self.FK_supply_request_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="supply_request" EntitySet="supply_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supply_request_supplier" Association="Self.FK_supply_request_supplier">
+            <End Role="supplier" EntitySet="supplier" />
+            <End Role="supply_request" EntitySet="supply_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supply_request_warehouse" Association="Self.FK_supply_request_warehouse">
+            <End Role="warehouse" EntitySet="warehouse" />
+            <End Role="supply_request" EntitySet="supply_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_Item" Association="Self.FK_warehouse_trasactions_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_supplier" Association="Self.FK_warehouse_trasactions_supplier">
+            <End Role="supplier" EntitySet="supplier" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_warehouse2" Association="Self.FK_warehouse_trasactions_warehouse2">
+            <End Role="warehouse" EntitySet="warehouse" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_warehouse3" Association="Self.FK_warehouse_trasactions_warehouse3">
+            <End Role="warehouse" EntitySet="warehouse" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="cli_id" />
+          </Key>
+          <Property Name="cli_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cli_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="moblie" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="fax" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="mail" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="website" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="issuance_request" Relationship="Self.FK_issuance_request_client" FromRole="client" ToRole="issuance_request" />
+        </EntityType>
+        <EntityType Name="issuance_request">
+          <Key>
+            <PropertyRef Name="is_id" />
+          </Key>
+          <Property Name="is_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="warehouse_id" Type="Int32" Nullable="false" />
+          <Property Name="is_date" Type="DateTime" Precision="0" />
+          <Property Name="client_id" Type="Int32" Nullable="false" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <NavigationProperty Name="client" Relationship="Self.FK_issuance_request_client" FromRole="issuance_request" ToRole="client" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_issuance_request_Item" FromRole="issuance_request" ToRole="Item" />
+          <NavigationProperty Name="warehouse" Relationship="Self.FK_issuance_request_warehouse" FromRole="issuance_request" ToRole="warehouse" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="item_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="item_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="unit" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="production_date" Type="DateTime" Precision="0" />
+          <Property Name="expire_date" Type="DateTime" Precision="0" />
+          <Property Name="warehouse_id" Type="Int32" />
+          <NavigationProperty Name="issuance_request" Relationship="Self.FK_issuance_request_Item" FromRole="Item" ToRole="issuance_request" />
+          <NavigationProperty Name="warehouse" Relationship="Self.FK_Item_warehouse" FromRole="Item" ToRole="warehouse" />
+          <NavigationProperty Name="supply_request" Relationship="Self.FK_supply_request_Item" FromRole="Item" ToRole="supply_request" />
+          <NavigationProperty Name="warehouse_trasactions" Relationship="Self.FK_warehouse_trasactions_Item" FromRole="Item" ToRole="warehouse_trasactions" />
+        </EntityType>
+        <EntityType Name="supplier">
+          <Key>
+            <PropertyRef Name="sup_id" />
+          </Key>
+          <Property Name="sup_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sup_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="website" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="fax" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="supply_request" Relationship="Self.FK_supply_request_supplier" FromRole="supplier" ToRole="supply_request" />
+          <NavigationProperty Name="warehouse_trasactions" Relationship="Self.FK_warehouse_trasactions_supplier" FromRole="supplier" ToRole="warehouse_trasactions" />
+        </EntityType>
+        <EntityType Name="supply_request">
+          <Key>
+            <PropertyRef Name="srequest_id" />
+          </Key>
+          <Property Name="srequest_id" Type="Int32" Nullable="false" />
+          <Property Name="warehouse_id" Type="Int32" Nullable="false" />
+          <Property Name="request_date" Type="DateTime" Precision="0" />
+          <Property Name="supplier_id" Type="Int32" />
+          <Property Name="production_date" Type="DateTime" Precision="0" />
+          <Property Name="expire_date" Type="DateTime" Precision="0" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_supply_request_Item" FromRole="supply_request" ToRole="Item" />
+          <NavigationProperty Name="supplier" Relationship="Self.FK_supply_request_supplier" FromRole="supply_request" ToRole="supplier" />
+          <NavigationProperty Name="warehouse" Relationship="Self.FK_supply_request_warehouse" FromRole="supply_request" ToRole="warehouse" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="warehouse">
+          <Key>
+            <PropertyRef Name="ware_id" />
+          </Key>
+          <Property Name="ware_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ware_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="ware_address" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="manger" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="issuance_request" Relationship="Self.FK_issuance_request_warehouse" FromRole="warehouse" ToRole="issuance_request" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Item_warehouse" FromRole="warehouse" ToRole="Item" />
+          <NavigationProperty Name="supply_request" Relationship="Self.FK_supply_request_warehouse" FromRole="warehouse" ToRole="supply_request" />
+          <NavigationProperty Name="warehouse_trasactions" Relationship="Self.FK_warehouse_trasactions_warehouse2" FromRole="warehouse" ToRole="warehouse_trasactions" />
+          <NavigationProperty Name="warehouse_trasactions1" Relationship="Self.FK_warehouse_trasactions_warehouse3" FromRole="warehouse" ToRole="warehouse_trasactions" />
+        </EntityType>
+        <EntityType Name="warehouse_trasactions">
+          <Key>
+            <PropertyRef Name="trans_id" />
+          </Key>
+          <Property Name="trans_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="from_warehouse" Type="Int32" />
+          <Property Name="to_warehouse" Type="Int32" />
+          <Property Name="supplier_id" Type="Int32" />
+          <Property Name="production_date" Type="DateTime" Precision="0" />
+          <Property Name="expire_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_warehouse_trasactions_Item" FromRole="warehouse_trasactions" ToRole="Item" />
+          <NavigationProperty Name="supplier" Relationship="Self.FK_warehouse_trasactions_supplier" FromRole="warehouse_trasactions" ToRole="supplier" />
+          <NavigationProperty Name="warehouse" Relationship="Self.FK_warehouse_trasactions_warehouse2" FromRole="warehouse_trasactions" ToRole="warehouse" />
+          <NavigationProperty Name="warehouse1" Relationship="Self.FK_warehouse_trasactions_warehouse3" FromRole="warehouse_trasactions" ToRole="warehouse" />
+        </EntityType>
+        <Association Name="FK_issuance_request_client">
+          <End Role="client" Type="Self.client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="issuance_request" Type="Self.issuance_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="cli_id" />
+            </Principal>
+            <Dependent Role="issuance_request">
+              <PropertyRef Name="client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issuance_request_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="issuance_request" Type="Self.issuance_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="issuance_request">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_issuance_request_warehouse">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="issuance_request" Type="Self.issuance_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="issuance_request">
+              <PropertyRef Name="warehouse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_warehouse">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="0..1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="warehouse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supply_request_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="supply_request" Type="Self.supply_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="supply_request">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supply_request_supplier">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="supply_request" Type="Self.supply_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="sup_id" />
+            </Principal>
+            <Dependent Role="supply_request">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_supplier">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="sup_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supply_request_warehouse">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="supply_request" Type="Self.supply_request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="supply_request">
+              <PropertyRef Name="warehouse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_warehouse2">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="from_warehouse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_warehouse_trasactions_warehouse3">
+          <End Role="warehouse" Type="Self.warehouse" Multiplicity="0..1" />
+          <End Role="warehouse_trasactions" Type="Self.warehouse_trasactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="warehouse">
+              <PropertyRef Name="ware_id" />
+            </Principal>
+            <Dependent Role="warehouse_trasactions">
+              <PropertyRef Name="to_warehouse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Trading_CompanyEntities6" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="clients" EntityType="Self.client" />
+          <EntitySet Name="issuance_request" EntityType="Self.issuance_request" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="suppliers" EntityType="Self.supplier" />
+          <EntitySet Name="supply_request" EntityType="Self.supply_request" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="warehouses" EntityType="Self.warehouse" />
+          <EntitySet Name="warehouse_trasactions" EntityType="Self.warehouse_trasactions" />
+          <AssociationSet Name="FK_issuance_request_client" Association="Self.FK_issuance_request_client">
+            <End Role="client" EntitySet="clients" />
+            <End Role="issuance_request" EntitySet="issuance_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issuance_request_Item" Association="Self.FK_issuance_request_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="issuance_request" EntitySet="issuance_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_issuance_request_warehouse" Association="Self.FK_issuance_request_warehouse">
+            <End Role="warehouse" EntitySet="warehouses" />
+            <End Role="issuance_request" EntitySet="issuance_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_warehouse" Association="Self.FK_Item_warehouse">
+            <End Role="warehouse" EntitySet="warehouses" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supply_request_Item" Association="Self.FK_supply_request_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="supply_request" EntitySet="supply_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_Item" Association="Self.FK_warehouse_trasactions_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supply_request_supplier" Association="Self.FK_supply_request_supplier">
+            <End Role="supplier" EntitySet="suppliers" />
+            <End Role="supply_request" EntitySet="supply_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_supplier" Association="Self.FK_warehouse_trasactions_supplier">
+            <End Role="supplier" EntitySet="suppliers" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supply_request_warehouse" Association="Self.FK_supply_request_warehouse">
+            <End Role="warehouse" EntitySet="warehouses" />
+            <End Role="supply_request" EntitySet="supply_request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_warehouse2" Association="Self.FK_warehouse_trasactions_warehouse2">
+            <End Role="warehouse" EntitySet="warehouses" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_warehouse_trasactions_warehouse3" Association="Self.FK_warehouse_trasactions_warehouse3">
+            <End Role="warehouse" EntitySet="warehouses" />
+            <End Role="warehouse_trasactions" EntitySet="warehouse_trasactions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Trading_CompanyEntities6">
+          <EntitySetMapping Name="clients">
+            <EntityTypeMapping TypeName="Model.client">
+              <MappingFragment StoreEntitySet="client">
+                <ScalarProperty Name="cli_id" ColumnName="cli_id" />
+                <ScalarProperty Name="cli_name" ColumnName="cli_name" />
+                <ScalarProperty Name="moblie" ColumnName="moblie" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="website" ColumnName="website" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="issuance_request">
+            <EntityTypeMapping TypeName="Model.issuance_request">
+              <MappingFragment StoreEntitySet="issuance_request">
+                <ScalarProperty Name="is_id" ColumnName="is_id" />
+                <ScalarProperty Name="warehouse_id" ColumnName="warehouse_id" />
+                <ScalarProperty Name="is_date" ColumnName="is_date" />
+                <ScalarProperty Name="client_id" ColumnName="client_id" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="Model.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="item_name" ColumnName="item_name" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="production_date" ColumnName="production_date" />
+                <ScalarProperty Name="expire_date" ColumnName="expire_date" />
+                <ScalarProperty Name="warehouse_id" ColumnName="warehouse_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="suppliers">
+            <EntityTypeMapping TypeName="Model.supplier">
+              <MappingFragment StoreEntitySet="supplier">
+                <ScalarProperty Name="sup_id" ColumnName="sup_id" />
+                <ScalarProperty Name="sup_name" ColumnName="sup_name" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="website" ColumnName="website" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="supply_request">
+            <EntityTypeMapping TypeName="Model.supply_request">
+              <MappingFragment StoreEntitySet="supply_request">
+                <ScalarProperty Name="srequest_id" ColumnName="srequest_id" />
+                <ScalarProperty Name="warehouse_id" ColumnName="warehouse_id" />
+                <ScalarProperty Name="request_date" ColumnName="request_date" />
+                <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
+                <ScalarProperty Name="production_date" ColumnName="production_date" />
+                <ScalarProperty Name="expire_date" ColumnName="expire_date" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="warehouses">
+            <EntityTypeMapping TypeName="Model.warehouse">
+              <MappingFragment StoreEntitySet="warehouse">
+                <ScalarProperty Name="ware_id" ColumnName="ware_id" />
+                <ScalarProperty Name="ware_name" ColumnName="ware_name" />
+                <ScalarProperty Name="ware_address" ColumnName="ware_address" />
+                <ScalarProperty Name="manger" ColumnName="manger" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="warehouse_trasactions">
+            <EntityTypeMapping TypeName="Model.warehouse_trasactions">
+              <MappingFragment StoreEntitySet="warehouse_trasactions">
+                <ScalarProperty Name="trans_id" ColumnName="trans_id" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="from_warehouse" ColumnName="from_warehouse" />
+                <ScalarProperty Name="to_warehouse" ColumnName="to_warehouse" />
+                <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
+                <ScalarProperty Name="production_date" ColumnName="production_date" />
+                <ScalarProperty Name="expire_date" ColumnName="expire_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
